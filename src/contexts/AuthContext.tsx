@@ -40,12 +40,11 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [initialLoading, setInitialLoading] = useState(true); // For initial auth check
-  const [authLoading, setAuthLoading] = useState(false); // For auth operations
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Add a ref to track error state for debugging
   const errorRef = useRef<string | null>(null);
   
   const clearError = () => {
@@ -58,17 +57,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSuccess(null);
   };
 
-  // Update error ref whenever error state changes
   useEffect(() => {
     errorRef.current = error;
     console.log('Error state updated to:', error);
   }, [error]);
   
   useEffect(() => {
-    // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // User is signed in, get additional data from Firestore
         const savedUser = localStorage.getItem('agentiq_user');
         const savedRole = localStorage.getItem('agentiq_role');
         
@@ -77,22 +73,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUserRole(savedRole);
         }
       } else {
-        // User is signed out
         setCurrentUser(null);
         setUserRole(null);
         localStorage.removeItem('agentiq_user');
         localStorage.removeItem('agentiq_role');
       }
-      setInitialLoading(false); // Only set initial loading to false
+      setInitialLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      setLoading(true);
+      setAuthLoading(true);
       setError(null);
       setSuccess(null);
       
@@ -116,12 +110,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSuccess(`Welcome back, ${user.name}!`);
         return true;
       } else {
-        // Enhanced error handling with more details
         const errorMessage = result.error || 'Login failed. Please check your credentials and try again.';
         console.error('Login failed:', errorMessage);
-        
         setError(errorMessage);
-        
         return false;
       }
     } catch (error) {
@@ -130,13 +121,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError(errorMessage);
       return false;
     } finally {
-      setLoading(false);
+      setAuthLoading(false);
     }
   };
 
   const register = async (email: string, password: string, name: string): Promise<boolean> => {
     try {
-      setAuthLoading(true); // Use authLoading
+      setAuthLoading(true);
       setError(null);
       setSuccess(null);
 
@@ -171,10 +162,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setError(errorMessage);
         errorRef.current = errorMessage;
 
-        // Debug: Check if error persists
         setTimeout(() => {
           console.log('Error ref after 100ms:', errorRef.current);
-          console.log('Error state after 100ms:', error); // This might be stale
+          console.log('Error state after 100ms:', error);
         }, 100);
         
         return false;
@@ -186,16 +176,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       errorRef.current = errorMessage;
       return false;
     } finally {
-      setAuthLoading(false); // Use authLoading
+      setAuthLoading(false);
       console.log('Final error state:', errorRef.current);
     }
   };
 
   const registerClientWithInvite = async (email: string, password: string, name: string, invitationToken: string): Promise<boolean> => {
-  try {
-    setAuthLoading(true); // Changed from setLoading
-    setError(null);
-    setSuccess(null);
+    try {
+      setAuthLoading(true);
+      setError(null);
+      setSuccess(null);
       
       const result = await registerClient(email, password, name, invitationToken);
       
@@ -217,16 +207,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSuccess(`Welcome to AgentIQ, ${user.name}! Your account has been created and you've been added to the dashboard.`);
         return true;
       } else {
-        // If email already exists, automatically try to sign in and join dashboard
         if (result.code === 'auth/email-already-in-use') {
           console.log('Email already exists, attempting to sign in and join dashboard...');
           setError('An account with this email already exists. Please use your existing password to join the dashboard.');
-          // Don't automatically try to sign in - let user enter their password
           return false;
         }
         
         console.error('Client registration failed:', result.error);
-        // Store error for UI to display
         setError(result.error || 'Client registration failed. Please try again.');
         return false;
       }
@@ -235,15 +222,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError('An unexpected error occurred. Please try again.');
       return false;
     } finally {
-    setAuthLoading(false); // Changed from setLoading
-  }
-};
+      setAuthLoading(false);
+    }
+  };
 
   const signInAndJoinDashboard = async (email: string, password: string, dashboardId: string): Promise<boolean> => {
-  try {
-    setAuthLoading(true); // Changed from setLoading
-    setError(null);
-    setSuccess(null);
+    try {
+      setAuthLoading(true);
+      setError(null);
+      setSuccess(null);
       
       const result = await signInUser(email, password);
       
@@ -262,7 +249,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('agentiq_user', JSON.stringify(user));
         localStorage.setItem('agentiq_role', result.user.role);
         
-        // Add user to dashboard and update status to active
         await addMemberToDashboard(dashboardId, result.user.id);
         await updateDashboardStatus(dashboardId, 'active');
         
@@ -278,9 +264,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError('An unexpected error occurred. Please try again.');
       return false;
     } finally {
-    setAuthLoading(false); // Changed from setLoading
-  }
-};
+      setAuthLoading(false);
+    }
+  };
 
   const logout = async () => {
     try {
@@ -306,28 +292,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     registerClientWithInvite,
     signInAndJoinDashboard,
     logout,
-    loading: authLoading, // Pass authLoading as loading
+    loading: authLoading,
     error,
     clearError,
     success,
     clearSuccess
   };
 
-  // Debug: Log context value changes
   useEffect(() => {
     console.log('AuthContext value updated:', { error, loading: authLoading, success });
   }, [error, authLoading, success]);
 
-  // Only block the initial render while checking auth state
   if (initialLoading) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-    </div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-blue-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
-  
+
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
