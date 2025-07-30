@@ -41,15 +41,14 @@ const LoginPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear any existing error message as the user types to correct it.
-    if (authError) {
-      clearError();
-    }
+    // The error is now cleared on a new submission or tab switch,
+    // not on every keystroke, which was causing the issue.
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // The login/register functions in AuthContext will clear the previous error.
     let success = false;
     if (activeTab === 'register') {
       success = await register(formData.email, formData.password, formData.name);
