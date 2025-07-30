@@ -258,41 +258,41 @@ const DashboardPage = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards - Only show for agents */}
         {userRole === 'agent' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between">
+             <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">Total Dashboards</p>
-                  <p className="text-3xl font-bold text-gray-900">{dashboards.length}</p>
+                 <p className="text-gray-600 text-xs sm:text-sm">Total Dashboards</p>
+                 <p className="text-2xl sm:text-3xl font-bold text-gray-900">{dashboards.length}</p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-blue-600" />
+               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                 <Users className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                 </div>
               </div>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between">
+             <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">Active Buyers</p>
-                  <p className="text-3xl font-bold text-green-600">
+                 <p className="text-gray-600 text-xs sm:text-sm">Active Buyers</p>
+                 <p className="text-2xl sm:text-3xl font-bold text-green-600">
                     {dashboards.filter(d => d.type === 'buyer').length}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Home className="w-6 h-6 text-green-600" />
+               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                 <Home className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                 </div>
               </div>
             </div>
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between">
+             <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">Active Sellers</p>
-                  <p className="text-3xl font-bold text-purple-600">
+                 <p className="text-gray-600 text-xs sm:text-sm">Active Sellers</p>
+                 <p className="text-2xl sm:text-3xl font-bold text-purple-600">
                     {dashboards.filter(d => d.type === 'seller').length}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Home className="w-6 h-6 text-purple-600" />
+               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                 <Home className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
                 </div>
               </div>
             </div>
@@ -327,8 +327,8 @@ const DashboardPage = () => {
           ) : (
             <div className="divide-y divide-gray-200">
               {dashboards.map((dashboard) => (
-                <div key={dashboard.id} className="p-4 sm:p-6 hover:bg-gray-50 transition-colors">
-                  <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+                <div key={dashboard.id} className="p-6 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h3 className="text-lg font-semibold text-gray-900">{dashboard.title}</h3>
@@ -368,7 +368,7 @@ const DashboardPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center justify-end space-x-1 sm:space-x-2 lg:ml-6 flex-shrink-0">
+                    <div className="flex items-center space-x-2 ml-6">
                       {userRole === 'agent' && (
                         <button
                           onClick={() => copyInvitationLink(dashboard)}
@@ -389,24 +389,23 @@ const DashboardPage = () => {
                             title="Edit Dashboard"
                           >
                             <Edit size={16} />
-                          </button>
+                         <Edit size={14} className="sm:w-4 sm:h-4" />
                           <button
                             onClick={() => handleDeleteDashboard(dashboard.id)}
                             className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete Dashboard"
+                         className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           >
                             <Trash2 size={16} />
-                          </button>
+                         <Trash2 size={14} className="sm:w-4 sm:h-4" />
                         </>
                       )}
                       <button
                         onClick={() => openDashboard(dashboard)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                        title="Open Dashboard"
-                      >
-                        <ExternalLink size={16} />
-                        <span>Open</span>
-                      </button>
+                       className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                     className="bg-blue-600 text-white px-2 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-1"
+                       {copiedId === dashboard.id ? <Check size={14} className="text-green-600 sm:w-4 sm:h-4" /> : <Copy size={14} className="sm:w-4 sm:h-4" />}
+                     <ExternalLink size={12} className="sm:w-3.5 sm:h-3.5" />
+                     <span className="text-xs sm:text-sm">Open</span>
                     </div>
                   </div>
                 </div>
@@ -415,7 +414,7 @@ const DashboardPage = () => {
           )}
         </div>
       </main>
-
+                         className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
       {/* Create Dashboard Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
