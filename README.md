@@ -47,13 +47,10 @@ Visit the live application: [https://myhomeflow.netlify.app](https://myhomeflow.
 - Email: `agent@agentiq.com`
 - Password: `password123`
 
-**Client Access (Buyer):**
-- Last Name: `smith`
-- Access Code: `SMITH2024`
-
-**Client Access (Seller):**
-- Last Name: `davis`
-- Access Code: `DAVIS2024`
+**Client Registration:**
+- Clients register via secure invitation links sent by agents
+- Full Firebase authentication for all users
+- Real-time collaboration between agents and clients
 
 ## 🏃‍♂️ Quick Start
 
@@ -132,33 +129,138 @@ The application uses production-ready Firestore security rules that ensure:
 - Clients can access dashboards only with valid access codes
 - All queries are properly authenticated and authorized
 
+## 🏗️ Component Architecture
+
+### Modular Design Principles
+- **Step-Based Organization**: Components grouped by journey steps
+- **Shared Components**: Reusable UI elements in dedicated shared folders  
+- **Single Responsibility**: Each component focuses on one specific feature
+- **TypeScript Interfaces**: Strong typing throughout the application
+- **Separation of Concerns**: Clear distinction between data, UI, and business logic
+
+### Benefits of Modular Structure
+- **Maintainability**: Easy to locate and update specific features
+- **Scalability**: New components can be added without affecting existing code
+- **Team Development**: Multiple developers can work on different steps simultaneously
+- **Testing**: Individual components can be tested in isolation
+- **Code Reuse**: Shared components reduce duplication
+
+### Component Communication
+- **Props**: Data flows down from parent to child components
+- **Callbacks**: Events bubble up to parent components
+- **Context**: Authentication state shared globally
+- **Firebase**: Real-time data synchronization between users
+
+### File Organization Standards
+- Maximum 200 lines per component file
+- Clear naming conventions (PascalCase for components)
+- Grouped imports (React, third-party, local)
+- TypeScript interfaces defined at component level
+
 ## 📱 Application Structure
 
+### High-Level Architecture
 ```
 src/
-├── components/           # Reusable components
-│   └── MonkeyAvatar.tsx     # Login page avatar component
-├── contexts/            # React contexts
-│   └── AuthContext.tsx     # Authentication state management
-├── firebase/            # Firebase configuration
-│   ├── config.ts           # Firebase initialization
-│   ├── auth.ts             # Authentication functions
-│   └── firestore.ts        # Database operations
-├── pages/               # Route components
-│   ├── LandingPage.tsx     # Marketing landing page
-│   ├── LoginPage.tsx       # Authentication
-│   ├── InvitePage.tsx      # Client invitation registration
-│   ├── DashboardPage.tsx   # Main dashboard management
-│   ├── BuyerDashboard.tsx  # Buyer journey interface
-│   └── SellerDashboard.tsx # Seller journey interface
-└── App.tsx             # Main application component
+├── components/                 # Modular component library
+│   ├── buyer-dashboard/           # Buyer journey components
+│   ├── seller-dashboard/          # Seller journey components
+│   └── MonkeyAvatar.tsx          # Login page avatar component
+├── contexts/                   # React contexts
+│   └── AuthContext.tsx            # Authentication state management
+├── firebase/                   # Firebase configuration
+│   ├── config.ts                  # Firebase initialization
+│   ├── auth.ts                    # Authentication functions
+│   └── firestore.ts               # Database operations
+├── pages/                      # Route components
+│   ├── LandingPage.tsx            # Marketing landing page
+│   ├── LoginPage.tsx              # Authentication
+│   ├── InvitePage.tsx             # Client invitation registration
+│   ├── DashboardPage.tsx          # Main dashboard management
+│   ├── BuyerDashboard.tsx         # Buyer journey interface
+│   └── SellerDashboard.tsx        # Seller journey interface
+└── App.tsx                     # Main application component
+```
+
+### Buyer Dashboard Components
+```
+src/components/buyer-dashboard/
+├── shared/                     # Shared components
+│   ├── DashboardHeader.tsx        # Header with navigation & progress
+│   ├── ProgressSidebar.tsx        # Step navigation sidebar  
+│   └── NotesSection.tsx           # Reusable notes component
+├── step-one/                   # Client Intake & Consultation
+│   ├── BuyerIntakeSection.tsx     # Complete intake section
+│   ├── BuyerRepoAgreement.tsx     # Agreement link component
+│   └── IntakeForm.tsx             # Client intake form
+├── step-two/                   # Financial Pre-Approval
+│   ├── FinancialToolsSection.tsx  # Complete financial section
+│   ├── MortgageFunFacts.tsx       # Educational content
+│   └── PitiMortgageCalculator.tsx # PITI calculator
+├── step-three/                 # House Hunting
+│   ├── HouseHuntingSection.tsx    # Complete house hunting section
+│   ├── OnlineSearchLinks.tsx      # Search website links
+│   ├── PropertyCard.tsx           # Individual property display
+│   ├── PropertyTracker.tsx        # Property management
+│   └── SearchCriteriaTool.tsx     # Search criteria overview
+├── step-four/                  # Offer & Negotiation
+│   ├── CMAViewingArea.tsx         # CMA document sharing
+│   ├── OfferDocumentLinks.tsx     # Required documents
+│   ├── OfferNegotiationInfo.tsx   # Educational content
+│   ├── OfferNegotiationSection.tsx # Complete offer section
+│   ├── OfferTrackerTool.tsx       # Offer tracking
+│   └── SimpleNetSheetEstimator.tsx # Cash-to-close calculator
+├── step-five/                  # Under Contract & Inspections
+│   ├── CriticalDateTrackerTool.tsx # Important deadlines
+│   ├── DocumentHubTool.tsx        # Document link storage
+│   ├── InspectionDiligenceSection.tsx # Complete inspection section
+│   ├── InspectionDueDiligenceTrackerTool.tsx # Task management
+│   ├── InspectionInfo.tsx         # Educational content
+│   ├── RecommendedVendors.tsx     # Vendor contacts
+│   └── RepairRequestBuilderTool.tsx # Repair request tracking
+└── step-six/                   # Closing Process
+    ├── ClosingContacts.tsx        # Key contact information
+    ├── ClosingCostFinalizer.tsx   # LE vs CD comparison
+    ├── ClosingInfo.tsx            # Educational content
+    ├── ClosingProcessSection.tsx  # Complete closing section
+    ├── FinalWalkthroughChecklistComponent.tsx # Pre-closing checklist
+    ├── MovingDayPlannerTool.tsx   # Moving preparation
+    └── UtilitiesTransferTrackerTool.tsx # Utility setup
+```
+
+### Seller Dashboard Components
+```
+src/components/seller-dashboard/
+├── shared/                     # Shared components
+│   ├── AccordionItem.tsx          # Reusable accordion component
+│   └── SellerNotesSection.tsx     # Shared notes component
+├── step-one/                   # Seller Consultation
+│   ├── SellerConsultationSection.tsx # Complete consultation section
+│   ├── SellerIntakeForm.tsx       # Seller intake form
+│   └── SellerListingAgreement.tsx # Listing agreement component
+├── step-two/                   # Market Analysis & Pricing
+│   ├── MarketAnalysisSection.tsx  # Complete market analysis section
+│   ├── MarketAnalysisCalculator.tsx # Home value estimator
+│   └── SellingTipsAndInsights.tsx # Educational content
+├── step-three/                 # Property Preparation
+│   ├── PropertyPreparationSection.tsx # Complete preparation section
+│   └── HomePreparationChecklist.tsx # Preparation checklist
+├── step-four/                  # Marketing & Showings
+│   ├── MarketingSection.tsx       # Complete marketing section
+│   └── MarketingStrategyPlanner.tsx # Marketing channel planner
+├── step-five/                  # Offers & Negotiation
+│   ├── OfferNegotiationSection.tsx # Complete offer section
+│   └── OfferManagementTool.tsx    # Offer tracking and management
+└── step-six/                   # Closing Process
+    ├── ClosingProcessSection.tsx # Complete closing section
+    └── SellerClosingPlanner.tsx  # Closing checklist
 ```
 
 ## 🔐 Authentication & Authorization
 
 ### Agent Authentication
 - Standard email/password authentication via Firebase Auth
-- Agents must be pre-registered in the system
+- Agents can register directly through the application
 - Full CRUD access to their client dashboards
 
 ### Client Access
