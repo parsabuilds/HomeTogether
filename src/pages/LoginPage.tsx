@@ -20,6 +20,11 @@ const LoginPage: React.FC = () => {
     clearSuccess 
   } = useAuth();
 
+  // Add this to monitor error state changes
+  useEffect(() => {
+    console.log('authError changed to:', authError);
+  }, [authError]);
+  
   // Determine the active tab from navigation state or default to 'login'.
   const initialTab = location.state?.activeTab === 'register' ? 'register' : 'login';
   const [activeTab, setActiveTab] = useState<'login' | 'register'>(initialTab);
