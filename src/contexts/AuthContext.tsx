@@ -192,10 +192,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const registerClientWithInvite = async (email: string, password: string, name: string, invitationToken: string): Promise<boolean> => {
-    try {
-      setLoading(true);
-      setError(null);
-      setSuccess(null);
+  try {
+    setAuthLoading(true); // Changed from setLoading
+    setError(null);
+    setSuccess(null);
       
       const result = await registerClient(email, password, name, invitationToken);
       
@@ -235,15 +235,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError('An unexpected error occurred. Please try again.');
       return false;
     } finally {
-      setLoading(false);
-    }
-  };
+    setAuthLoading(false); // Changed from setLoading
+  }
+};
 
   const signInAndJoinDashboard = async (email: string, password: string, dashboardId: string): Promise<boolean> => {
-    try {
-      setLoading(true);
-      setError(null);
-      setSuccess(null);
+  try {
+    setAuthLoading(true); // Changed from setLoading
+    setError(null);
+    setSuccess(null);
       
       const result = await signInUser(email, password);
       
@@ -278,9 +278,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError('An unexpected error occurred. Please try again.');
       return false;
     } finally {
-      setLoading(false);
-    }
-  };
+    setAuthLoading(false); // Changed from setLoading
+  }
+};
 
   const logout = async () => {
     try {
