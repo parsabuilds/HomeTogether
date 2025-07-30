@@ -332,14 +332,14 @@ const DashboardPage = () => {
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h3 className="text-lg font-semibold text-gray-900">{dashboard.title}</h3>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        <span className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-medium ${
                           dashboard.type === 'buyer' 
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-purple-100 text-purple-800'
                         }`}>
                           {dashboard.type}
                         </span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        <span className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-medium ${
                           dashboard.status === 'active' 
                             ? 'bg-blue-100 text-blue-800' 
                             : 'bg-yellow-100 text-yellow-800'
@@ -347,12 +347,12 @@ const DashboardPage = () => {
                           {dashboard.status === 'active' ? 'Active' : 'Pending'}
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-sm text-gray-600">
                         <div>
-                          <span className="font-medium">Client:</span> {dashboard.clientName}
+                          <span className="font-medium">Client:</span> <span className="break-words">{dashboard.clientName}</span>
                         </div>
                         <div>
-                          <span className="font-medium">Email:</span> {dashboard.clientEmail}
+                          <span className="font-medium">Email:</span> <span className="break-words">{dashboard.clientEmail}</span>
                         </div>
                       </div>
                       <div className="mt-3">
@@ -389,23 +389,24 @@ const DashboardPage = () => {
                             title="Edit Dashboard"
                           >
                             <Edit size={16} />
-                         <Edit size={14} className="sm:w-4 sm:h-4" />
+                          </button>
                           <button
                             onClick={() => handleDeleteDashboard(dashboard.id)}
                             className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                         className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete Dashboard"
                           >
                             <Trash2 size={16} />
-                         <Trash2 size={14} className="sm:w-4 sm:h-4" />
+                          </button>
                         </>
                       )}
                       <button
                         onClick={() => openDashboard(dashboard)}
-                       className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                     className="bg-blue-600 text-white px-2 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-1"
-                       {copiedId === dashboard.id ? <Check size={14} className="text-green-600 sm:w-4 sm:h-4" /> : <Copy size={14} className="sm:w-4 sm:h-4" />}
-                     <ExternalLink size={12} className="sm:w-3.5 sm:h-3.5" />
-                     <span className="text-xs sm:text-sm">Open</span>
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                        title="Open Dashboard"
+                      >
+                        <ExternalLink size={16} />
+                        <span>Open</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -414,7 +415,7 @@ const DashboardPage = () => {
           )}
         </div>
       </main>
-                         className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+
       {/* Create Dashboard Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
