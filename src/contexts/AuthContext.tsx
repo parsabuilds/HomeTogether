@@ -107,19 +107,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const errorMessage = result.error || 'Login failed. Please check your credentials and try again.';
         console.error('Login failed:', errorMessage);
         
-        // Force a small delay to ensure state update is processed
-        setTimeout(() => {
-          setError(errorMessage);
-        }, 100);
+        setError(errorMessage);
         
         return false;
       }
     } catch (error) {
       console.error('Login error:', error);
       const errorMessage = 'An unexpected error occurred. Please check your internet connection and try again.';
-      setTimeout(() => {
-        setError(errorMessage);
-      }, 100);
+      setError(errorMessage);
       return false;
     } finally {
       setLoading(false);
@@ -156,19 +151,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const errorMessage = result.error || 'Registration failed. Please check your information and try again.';
         console.error('Registration failed:', errorMessage);
         
-        // Force a small delay to ensure state update is processed
-        setTimeout(() => {
-          setError(errorMessage);
-        }, 100);
+        setError(errorMessage);
         
         return false;
       }
     } catch (error) {
       console.error('Registration error:', error);
       const errorMessage = 'An unexpected error occurred during registration. Please check your internet connection and try again.';
-      setTimeout(() => {
-        setError(errorMessage);
-      }, 100);
+      setError(errorMessage);
       return false;
     } finally {
       setLoading(false);
