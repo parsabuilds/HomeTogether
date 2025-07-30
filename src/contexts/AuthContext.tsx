@@ -126,8 +126,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(true);
       setError(null);
       setSuccess(null);
+
+      console.log('Starting registration for:', email); // ADD THIS
       
       const result = await registerAgent(email, password, name);
+
+      console.log('Registration result:', result); // ADD THIS
       
       if (result.success && result.user) {
         const user: User = {
@@ -150,8 +154,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Enhanced error handling with more details
         const errorMessage = result.error || 'Registration failed. Please check your information and try again.';
         console.error('Registration failed:', errorMessage);
-        
+
+        console.log('Setting error state to:', errorMessage); // ADD THIS
         setError(errorMessage);
+
+        // Verify error was set
+        setTimeout(() => {
+          console.log('Error state after setError:', error); // ADD THIS
+        }, 100);
         
         return false;
       }
