@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import { registerAgent, registerClient, signInUser, signOutUser } from '../firebase/auth';
@@ -44,13 +44,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  // Add a ref to track error state for debugging
+  const errorRef = useRef<string | null>(null);
+  
   const clearError = () => {
+    console.log('clearError called');
     setError(null);
+    errorRef.current = null;
   };
 
   const clearSuccess = () => {
     setSuccess(null);
   };
+
+  // Update error ref whenever error state changes
+  useEffect(() => {
+    errorRef.current = error;
+    console.log('Error state updated to:', error);
+  }, [error]);
+  
   useEffect(() => {
     // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -155,12 +167,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const errorMessage = result.error || 'Registration failed. Please check your information and try again.';
         console.error('Registration failed:', errorMessage);
 
+        
+        
+        
         console.log('Setting error state to:', errorMessage); // ADD THIS
         setError(errorMessage);
+        errorRef.current = errorMessage;
 
-        // Verify error was set
+        // Debug: Check if error persists
         setTimeout(() => {
-          console.log('Error state after setError:', error); // ADD THIS
+          console.log('Error ref after 100ms:', errorRef.current);
+          console.log('Error state after 100ms:', error); // This might be stale
         }, 100);
         
         return false;
@@ -169,9 +186,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Registration error:', error);
       const errorMessage = 'An unexpected error occurred during registration. Please check your internet connection and try again.';
       setError(errorMessage);
+      errorRef.current = errorMessage;
       return false;
     } finally {
       setLoading(false);
+      console.log('Final error state:', errorRef.current);
     }
   };
 
