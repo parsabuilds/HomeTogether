@@ -131,7 +131,7 @@ export const sendContactEmail = functions.https.onRequest(async (req, res) => {
     
     // Send error response
     res.status(500).json({ 
-      error: error.message || 'Failed to send message. Please try again later.' 
+      error: (error as Error).message || 'Failed to send message. Please try again later.' 
     });
   }
 });
