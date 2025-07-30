@@ -22,8 +22,25 @@ const LoginPage: React.FC = () => {
 
   // Add this to monitor error state changes
   useEffect(() => {
-    console.log('authError changed to:', authError);
+    console.log('LoginPage: authError changed to:', authError);
+    if (authError) {
+      console.log('LoginPage: Error is truthy, should display error UI');
+      // Check if error element exists in DOM
+      setTimeout(() => {
+        const errorElement = document.querySelector('.bg-red-50');
+        console.log('Error element in DOM:', errorElement);
+      }, 0);
+    }
   }, [authError]);
+
+  // Debug: Monitor all auth context values
+  useEffect(() => {
+    console.log('LoginPage: Auth context state:', {
+      loading,
+      authError,
+      authSuccess
+    });
+  }, [loading, authError, authSuccess]);
   
   // Determine the active tab from navigation state or default to 'login'.
   const initialTab = location.state?.activeTab === 'register' ? 'register' : 'login';
@@ -56,24 +73,47 @@ const LoginPage: React.FC = () => {
     // The login/register functions in AuthContext will clear the previous error.
     let success = false;
     if (activeTab === 'register') {
+      console.log('Calling register function...');
       success = await register(formData.email, formData.password, formData.name);
+      console.log('Register returned:', success);
     } else {
+      console.log('Calling login function...');
       success = await login(formData.email, formData.password);
+      console.log('Login returned:', success);
     }
 
+    // Check error state immediately after auth attempt
+    console.log('Current authError after submit:', authError);
+
     if (success) {
-      // Small delay to allow user to see success message before redirecting.
       setTimeout(() => {
         navigate('/dashboard');
       }, 1500);
     }
-    // No need for a try/catch or local loading state management here.
-    // The AuthContext handles all of it.
   };
 
+  // Add a test button to manually set an error (for debugging)
+  const testError = () => {
+    console.log('Test: Attempting to register with weak password');
+    register('test@example.com', '123', 'Test User');
+  };
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+      {/* Add debug info at the top */}
+        <div className="mb-4 p-2 bg-gray-800 text-white text-xs rounded">
+          <div>Debug Info:</div>
+          <div>Loading: {String(loading)}</div>
+          <div>Error: {authError || 'null'}</div>
+          <div>Success: {authSuccess || 'null'}</div>
+          <button 
+            onClick={testError}
+            className="mt-2 px-2 py-1 bg-red-600 text-white rounded text-xs"
+          >
+            Test Error (Weak Password)
+          </button>
+        </div>
         {/* Header */}
         <div className="text-center mb-8">
           <MonkeyAvatar
@@ -145,22 +185,32 @@ const LoginPage: React.FC = () => {
 
           {/* Error Message Display */}
           {authError && (
-            <div className="mb-6 p-4 bg-red-50 border-2 border-red-300 rounded-lg shadow-sm">
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-red-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="font-bold text-red-800 text-base">
-                    {activeTab === 'login' ? 'Sign In Failed' : 'Registration Failed'}
-                  </p>
-                  <p className="mt-2 text-red-700 text-sm leading-relaxed">{authError}</p>
-                </div>
+          <div 
+            className="mb-6 p-4 bg-red-50 border-2 border-red-300 rounded-lg shadow-sm"
+            style={{ 
+              // Force visibility for debugging
+              display: 'block !important',
+              opacity: '1 !important',
+              visibility: 'visible !important'
+            }}
+          >
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <svg className="h-6 w-6 text-red-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="font-bold text-red-800 text-base">
+                  {activeTab === 'login' ? 'Sign In Failed' : 'Registration Failed'}
+                </p>
+                <p className="mt-2 text-red-700 text-sm leading-relaxed">
+                  {authError}
+                </p>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {activeTab === 'register' && (
