@@ -56,6 +56,7 @@ const getAuthErrorMessage = (error: AuthError) => {
         // Use Firebase's message for any unhandled errors, or fall back to a generic one.
         message = error.message || 'An unexpected authentication error occurred.';
   }
+  console.log('Formatted error message:', message); // ADD THIS
   return { message, code: error.code };
 };
 
@@ -83,6 +84,7 @@ export const registerAgent = async (email, password, name) => {
     return { success: true, user: { id: user.uid, email, name, role: 'agent' } };
   } catch (error) {
     const { message, code } = getAuthErrorMessage(error as AuthError);
+    console.log('registerAgent returning error:', { message, code }); // ADD THIS
     return { success: false, error: message, code: code };
   }
 };
