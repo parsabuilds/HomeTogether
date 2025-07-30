@@ -68,7 +68,7 @@ const ContactUsPage = () => {
 
     try {
       // TODO: Replace with your actual Cloud Function URL after deployment
-      const functionUrl = 'https://YOUR_REGION-YOUR_PROJECT_ID.cloudfunctions.net/sendContactEmail';
+      const functionUrl = 'https://helloworld-l7xawwa4va-uc.a.run.app';
       
       const response = await fetch(functionUrl, {
         method: 'POST',
