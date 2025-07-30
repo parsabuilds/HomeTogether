@@ -95,11 +95,11 @@ exports.sendContactEmail = functions.https.onRequest(async (req, res) => {
     const sendSmtpEmail = new SendSmtpEmail();
     sendSmtpEmail.sender = { 
       name: 'AgentIQ Contact Form', 
-      email: 'your-verified-sender@yourdomain.com' // TODO: Replace with your verified Brevo sender email
+      email: 'parsarajabi14@gmail.com' // TODO: Replace with your verified Brevo sender email
     };
     sendSmtpEmail.to = [{ 
       name: 'AgentIQ Support', 
-      email: 'your-email@example.com' // TODO: Replace with your personal email
+      email: 'parsarajabi7@gmail.com' // TODO: Replace with your personal email
     }];
     sendSmtpEmail.replyTo = { 
       name: name, 
