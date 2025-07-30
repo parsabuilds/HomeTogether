@@ -61,11 +61,23 @@ const LoginPage: React.FC = () => {
   }, [activeTab, clearError, clearSuccess]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    // The error is now cleared on a new submission or tab switch,
-    // not on every keystroke, which was causing the issue.
-  };
+  const { name, value } = e.target;
+  setFormData(prev => ({ ...prev, [name]: value }));
+  
+  // Only clear error if it's related to the field being edited
+  if (authError) {
+    // Clear error only for specific cases
+    if (
+      (name === 'email' && authError.toLowerCase().includes('email')) ||
+      (name === 'password' && authError.toLowerCase().includes('password')) ||
+      (name === 'name' && authError.toLowerCase().includes('name'))
+    ) {
+      clearError();
+    }
+    // Or just remove the clearError entirely to keep errors visible
+    // until the next submission attempt
+  }
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
