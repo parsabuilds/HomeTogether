@@ -40,7 +40,8 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true); // For initial auth check
+  const [authLoading, setAuthLoading] = useState(false); // For auth operations
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -82,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem('agentiq_user');
         localStorage.removeItem('agentiq_role');
       }
-      setLoading(false);
+      setInitialLoading(false); // Only set initial loading to false
     });
 
     // Cleanup subscription on unmount
@@ -135,15 +136,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (email: string, password: string, name: string): Promise<boolean> => {
     try {
-      setLoading(true);
+      setAuthLoading(true); // Use authLoading
       setError(null);
       setSuccess(null);
 
-      console.log('Starting registration for:', email); // ADD THIS
+      console.log('Starting registration for:', email);
       
       const result = await registerAgent(email, password, name);
 
-      console.log('Registration result:', result); // ADD THIS
+      console.log('Registration result:', result);
       
       if (result.success && result.user) {
         const user: User = {
@@ -163,14 +164,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSuccess(`Account created successfully! Welcome to AgentIQ, ${user.name}!`);
         return true;
       } else {
-        // Enhanced error handling with more details
         const errorMessage = result.error || 'Registration failed. Please check your information and try again.';
         console.error('Registration failed:', errorMessage);
-
         
-        
-        
-        console.log('Setting error state to:', errorMessage); // ADD THIS
+        console.log('Setting error state to:', errorMessage);
         setError(errorMessage);
         errorRef.current = errorMessage;
 
@@ -189,7 +186,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       errorRef.current = errorMessage;
       return false;
     } finally {
-      setLoading(false);
+      setAuthLoading(false); // Use authLoading
       console.log('Final error state:', errorRef.current);
     }
   };
@@ -309,13 +306,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     registerClientWithInvite,
     signInAndJoinDashboard,
     logout,
-    loading,
+    loading: authLoading, // Pass authLoading as loading
     error,
     clearError,
     success,
     clearSuccess
   };
 
+  // Debug: Log context value changes
+  useEffect(() => {
+    console.log('AuthContext value updated:', { error, loading: authLoading, success });
+  }, [error, authLoading, success]);
+
+  // Only block the initial render while checking auth state
+  if (initialLoading) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>;
+  }
+  
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}
