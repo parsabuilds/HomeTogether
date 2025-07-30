@@ -383,15 +383,15 @@ const SellerDashboard = () => {
       {/* Header */}
       <header className="bg-white shadow-md border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+         <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
             <div>
               <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Your Home Selling Journey</h1>
               <p className="text-slate-600 mt-0.5 text-xs sm:text-sm">
                 Let's get your home sold, {sellerData.name || currentUser?.name || 'Client'}!
               </p>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
+           <div className="flex items-center justify-between sm:justify-end space-x-4">
+             <div className="text-right sm:text-right">
                 <div className="text-xl sm:text-2xl font-bold text-purple-600">{calculateProgress()}%</div>
                 <div className="text-xs text-slate-500">Complete</div>
               </div>

@@ -122,11 +122,11 @@ const LoginPage = () => {
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
           <div className="flex items-center justify-center mb-6">
             {activeTab === 'login' ? (
-              <Mail className="w-6 h-6 text-blue-600 mr-2" />
+             <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2" />
             ) : (
-              <UserPlus className="w-6 h-6 text-blue-600 mr-2" />
+             <UserPlus className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2" />
             )}
-            <h2 className="text-2xl font-bold text-gray-900">
+           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
               {activeTab === 'login' ? 'Welcome Back' : 'Create Account'}
             </h2>
           </div>

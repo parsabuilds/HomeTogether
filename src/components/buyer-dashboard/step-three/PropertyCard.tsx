@@ -73,33 +73,33 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         <div className="mt-auto pt-2 grid grid-cols-2 gap-2 text-sm">
           <button 
             onClick={() => onOpenEdit(type, index)} 
-            className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1.5 rounded-md flex items-center justify-center"
+           className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-1.5 sm:px-2 py-1.5 rounded-md flex items-center justify-center text-xs sm:text-sm"
           >
-            <Edit size={14} className="mr-1"/> Edit
+           <Edit size={12} className="mr-1 sm:w-3.5 sm:h-3.5"/> <span className="hidden sm:inline">Edit</span>
           </button>
           <a 
             href={property.listingUrl || '#'} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className={`px-2 py-1.5 rounded-md text-center ${
+           className={`px-1.5 sm:px-2 py-1.5 rounded-md text-center text-xs sm:text-sm ${
               property.listingUrl 
                 ? 'bg-blue-500 hover:bg-blue-600 text-white' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >
-            View Details
+           <span className="hidden sm:inline">View Details</span><span className="sm:hidden">View</span>
           </a>
           <button 
             onClick={() => onOpenNotes(type, index)} 
-            className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1.5 rounded-md flex items-center justify-center"
+           className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-1.5 sm:px-2 py-1.5 rounded-md flex items-center justify-center text-xs sm:text-sm"
           >
-            <Edit3 size={14} className="mr-1"/> Notes
+           <Edit3 size={12} className="mr-1 sm:w-3.5 sm:h-3.5"/> <span className="hidden sm:inline">Notes</span>
           </button>
           <button 
             onClick={() => onOpenScorecard(type, index)} 
-            className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-2 py-1.5 rounded-md flex items-center justify-center"
+           className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-1.5 sm:px-2 py-1.5 rounded-md flex items-center justify-center text-xs sm:text-sm"
           >
-            <Star size={14} className="mr-1"/> Score
+           <Star size={12} className="mr-1 sm:w-3.5 sm:h-3.5"/> <span className="hidden sm:inline">Score</span>
           </button>
         </div>
       </div>

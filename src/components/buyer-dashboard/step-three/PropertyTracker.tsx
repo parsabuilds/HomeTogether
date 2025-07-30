@@ -38,16 +38,16 @@ const PropertyTracker: React.FC<PropertyTrackerProps> = ({
     <div className="space-y-6 mt-6">
       <section className="bg-white rounded-lg p-4 md:p-6 shadow-sm border">
         <div className="flex justify-between items-center mb-4">
-          <h4 className="text-base font-semibold text-gray-700">Client's Interested Properties</h4>
+          <h4 className="text-sm sm:text-base font-semibold text-gray-700">Client's Interested Properties</h4>
           <button 
             onClick={() => openAddPropertyModal('client')} 
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm flex items-center"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm flex items-center"
           >
-            <PlusCircle size={16} className="mr-1.5" /> Add Property
+            <PlusCircle size={14} className="mr-1 sm:mr-1.5 sm:w-4 sm:h-4" /> <span className="hidden sm:inline">Add Property</span><span className="sm:hidden">Add</span>
           </button>
         </div>
         {clientProperties.length === 0 ? (
-          <p className="text-sm text-gray-500">No properties added by client yet.</p>
+          <p className="text-xs sm:text-sm text-gray-500">No properties added by client yet.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {clientProperties.map((prop, index) => (
@@ -67,16 +67,16 @@ const PropertyTracker: React.FC<PropertyTrackerProps> = ({
       
       <section className="bg-white rounded-lg p-4 md:p-6 shadow-sm border">
         <div className="flex justify-between items-center mb-4">
-          <h4 className="text-base font-semibold text-gray-700">Agent's Recommended Properties</h4>
+          <h4 className="text-sm sm:text-base font-semibold text-gray-700">Agent's Recommended Properties</h4>
           <button 
             onClick={() => openAddPropertyModal('agent')} 
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md text-sm flex items-center"
+            className="bg-green-500 hover:bg-green-600 text-white px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm flex items-center"
           >
-            <PlusCircle size={16} className="mr-1.5" /> Recommend
+            <PlusCircle size={14} className="mr-1 sm:mr-1.5 sm:w-4 sm:h-4" /> <span className="hidden sm:inline">Recommend</span><span className="sm:hidden">Add</span>
           </button>
         </div>
         {agentProperties.length === 0 ? (
-          <p className="text-sm text-gray-500">No properties recommended by agent yet.</p>
+          <p className="text-xs sm:text-sm text-gray-500">No properties recommended by agent yet.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {agentProperties.map((prop, index) => (

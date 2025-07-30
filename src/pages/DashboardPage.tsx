@@ -327,19 +327,19 @@ const DashboardPage = () => {
           ) : (
             <div className="divide-y divide-gray-200">
               {dashboards.map((dashboard) => (
-                <div key={dashboard.id} className="p-6 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center justify-between">
+                <div key={dashboard.id} className="p-4 sm:p-6 hover:bg-gray-50 transition-colors">
+                  <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h3 className="text-lg font-semibold text-gray-900">{dashboard.title}</h3>
-                        <span className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-medium ${
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           dashboard.type === 'buyer' 
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-purple-100 text-purple-800'
                         }`}>
                           {dashboard.type}
                         </span>
-                        <span className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-medium ${
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           dashboard.status === 'active' 
                             ? 'bg-blue-100 text-blue-800' 
                             : 'bg-yellow-100 text-yellow-800'
@@ -347,12 +347,12 @@ const DashboardPage = () => {
                           {dashboard.status === 'active' ? 'Active' : 'Pending'}
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-sm text-gray-600">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
                         <div>
-                          <span className="font-medium">Client:</span> <span className="break-words">{dashboard.clientName}</span>
+                          <span className="font-medium">Client:</span> {dashboard.clientName}
                         </div>
                         <div>
-                          <span className="font-medium">Email:</span> <span className="break-words">{dashboard.clientEmail}</span>
+                          <span className="font-medium">Email:</span> {dashboard.clientEmail}
                         </div>
                       </div>
                       <div className="mt-3">
@@ -368,7 +368,7 @@ const DashboardPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2 ml-6">
+                    <div className="flex items-center justify-end space-x-1 sm:space-x-2 lg:ml-6 flex-shrink-0">
                       {userRole === 'agent' && (
                         <button
                           onClick={() => copyInvitationLink(dashboard)}
