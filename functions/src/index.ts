@@ -1,9 +1,10 @@
-// functions/src/index.ts (or functions/index.js for JavaScript)
+// functions/src/index.ts
 
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
-import { ApiClient, TransactionalEmailsApi, SendSmtpEmail } from '@getbrevo/brevo';
+// Corrected import for Brevo v3, including the ApiKeys enum
+import { TransactionalEmailsApi, SendSmtpEmail, TransactionalEmailsApiApiKeys } from '@getbrevo/brevo';
 
 // Initialize Firebase Admin SDK
 admin.initializeApp();
@@ -12,6 +13,7 @@ admin.initializeApp();
 const secretManagerClient = new SecretManagerServiceClient();
 
 // Function to get Brevo API key from Secret Manager
+// This function remains unchanged from your original file.
 async function getBrevoApiKey(): Promise<string> {
   try {
     const projectId = process.env.GCLOUD_PROJECT;
@@ -38,7 +40,7 @@ async function getBrevoApiKey(): Promise<string> {
 // Contact form submission handler
 export const sendContactEmail = functions.https.onRequest(async (req, res) => {
   // Set CORS headers
-  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Origin', '*'); // For production, restrict this to your web app's domain
   res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -78,11 +80,14 @@ export const sendContactEmail = functions.https.onRequest(async (req, res) => {
     // Get Brevo API key from Secret Manager
     const apiKey = await getBrevoApiKey();
 
-    // Initialize Brevo API client
-    const apiClient = new ApiClient();
-    apiClient.authentications['api-key'].apiKey = apiKey;
-    
-    const transactionalEmailsApi = new TransactionalEmailsApi(apiClient);
+    // Correctly initialize Brevo TransactionalEmailsApi
+    const transactionalEmailsApi = new TransactionalEmailsApi();
+
+    // Set the API key for authentication on the API instance
+    transactionalEmailsApi.setApiKey(
+      TransactionalEmailsApiApiKeys.apiKey,
+      apiKey
+    );
 
     // Prepare email content
     const htmlContent = `
@@ -100,8 +105,9 @@ export const sendContactEmail = functions.https.onRequest(async (req, res) => {
       </p>
     `;
 
-    // Create email object
+    // Create the email object
     const sendSmtpEmail = new SendSmtpEmail();
+    
     sendSmtpEmail.sender = { 
       name: 'AgentIQ Contact Form', 
       email: 'parsarajabi14@gmail.com' // TODO: Replace with your verified Brevo sender email
@@ -126,12 +132,16 @@ export const sendContactEmail = functions.https.onRequest(async (req, res) => {
       message: 'Your message has been sent successfully!' 
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error sending email:', error);
     
-    // Send error response
+    let errorMessage = 'Failed to send message. Please try again later.';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
     res.status(500).json({ 
-      error: (error as Error).message || 'Failed to send message. Please try again later.' 
+      error: errorMessage 
     });
   }
 });
