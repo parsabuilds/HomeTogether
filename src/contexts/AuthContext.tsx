@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import { registerAgent, registerClient, signInUser, signOutUser } from '../firebase/auth';
@@ -40,31 +40,22 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [authLoading, setAuthLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const errorRef = useRef<string | null>(null);
-  
   const clearError = () => {
-    console.log('clearError called');
     setError(null);
-    errorRef.current = null;
   };
 
   const clearSuccess = () => {
     setSuccess(null);
   };
-
   useEffect(() => {
-    errorRef.current = error;
-    console.log('Error state updated to:', error);
-  }, [error]);
-  
-  useEffect(() => {
+    // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
+        // User is signed in, get additional data from Firestore
         const savedUser = localStorage.getItem('agentiq_user');
         const savedRole = localStorage.getItem('agentiq_role');
         
@@ -73,20 +64,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUserRole(savedRole);
         }
       } else {
+        // User is signed out
         setCurrentUser(null);
         setUserRole(null);
         localStorage.removeItem('agentiq_user');
         localStorage.removeItem('agentiq_role');
       }
-      setInitialLoading(false);
+      setLoading(false);
     });
 
+    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      setAuthLoading(true);
+      setLoading(true);
       setError(null);
       setSuccess(null);
       
@@ -110,32 +103,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSuccess(`Welcome back, ${user.name}!`);
         return true;
       } else {
+        // Enhanced error handling with more details
         const errorMessage = result.error || 'Login failed. Please check your credentials and try again.';
         console.error('Login failed:', errorMessage);
-        setError(errorMessage);
+        
+        // Force a small delay to ensure state update is processed
+        setTimeout(() => {
+          setError(errorMessage);
+        }, 100);
+        
         return false;
       }
     } catch (error) {
       console.error('Login error:', error);
       const errorMessage = 'An unexpected error occurred. Please check your internet connection and try again.';
-      setError(errorMessage);
+      setTimeout(() => {
+        setError(errorMessage);
+      }, 100);
       return false;
     } finally {
-      setAuthLoading(false);
+      setLoading(false);
     }
   };
 
   const register = async (email: string, password: string, name: string): Promise<boolean> => {
     try {
-      setAuthLoading(true);
+      setLoading(true);
       setError(null);
       setSuccess(null);
-
-      console.log('Starting registration for:', email);
       
       const result = await registerAgent(email, password, name);
-
-      console.log('Registration result:', result);
       
       if (result.success && result.user) {
         const user: User = {
@@ -155,16 +152,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSuccess(`Account created successfully! Welcome to AgentIQ, ${user.name}!`);
         return true;
       } else {
+        // Enhanced error handling with more details
         const errorMessage = result.error || 'Registration failed. Please check your information and try again.';
         console.error('Registration failed:', errorMessage);
         
-        console.log('Setting error state to:', errorMessage);
-        setError(errorMessage);
-        errorRef.current = errorMessage;
-
+        // Force a small delay to ensure state update is processed
         setTimeout(() => {
-          console.log('Error ref after 100ms:', errorRef.current);
-          console.log('Error state after 100ms:', error);
+          setError(errorMessage);
         }, 100);
         
         return false;
@@ -172,18 +166,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('Registration error:', error);
       const errorMessage = 'An unexpected error occurred during registration. Please check your internet connection and try again.';
-      setError(errorMessage);
-      errorRef.current = errorMessage;
+      setTimeout(() => {
+        setError(errorMessage);
+      }, 100);
       return false;
     } finally {
-      setAuthLoading(false);
-      console.log('Final error state:', errorRef.current);
+      setLoading(false);
     }
   };
 
   const registerClientWithInvite = async (email: string, password: string, name: string, invitationToken: string): Promise<boolean> => {
     try {
-      setAuthLoading(true);
+      setLoading(true);
       setError(null);
       setSuccess(null);
       
@@ -207,13 +201,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSuccess(`Welcome to AgentIQ, ${user.name}! Your account has been created and you've been added to the dashboard.`);
         return true;
       } else {
+        // If email already exists, automatically try to sign in and join dashboard
         if (result.code === 'auth/email-already-in-use') {
           console.log('Email already exists, attempting to sign in and join dashboard...');
           setError('An account with this email already exists. Please use your existing password to join the dashboard.');
+          // Don't automatically try to sign in - let user enter their password
           return false;
         }
         
         console.error('Client registration failed:', result.error);
+        // Store error for UI to display
         setError(result.error || 'Client registration failed. Please try again.');
         return false;
       }
@@ -222,13 +219,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError('An unexpected error occurred. Please try again.');
       return false;
     } finally {
-      setAuthLoading(false);
+      setLoading(false);
     }
   };
 
   const signInAndJoinDashboard = async (email: string, password: string, dashboardId: string): Promise<boolean> => {
     try {
-      setAuthLoading(true);
+      setLoading(true);
       setError(null);
       setSuccess(null);
       
@@ -249,6 +246,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('agentiq_user', JSON.stringify(user));
         localStorage.setItem('agentiq_role', result.user.role);
         
+        // Add user to dashboard and update status to active
         await addMemberToDashboard(dashboardId, result.user.id);
         await updateDashboardStatus(dashboardId, 'active');
         
@@ -264,7 +262,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError('An unexpected error occurred. Please try again.');
       return false;
     } finally {
-      setAuthLoading(false);
+      setLoading(false);
     }
   };
 
@@ -292,28 +290,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     registerClientWithInvite,
     signInAndJoinDashboard,
     logout,
-    loading: authLoading,
+    loading,
     error,
     clearError,
     success,
     clearSuccess
   };
 
-  useEffect(() => {
-    console.log('AuthContext value updated:', { error, loading: authLoading, success });
-  }, [error, authLoading, success]);
-
-  if (initialLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-blue-100">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

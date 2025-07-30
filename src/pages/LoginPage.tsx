@@ -1,131 +1,84 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Eye, EyeOff, ArrowLeft, UserPlus, Mail } from 'lucide-react';
+import { Home, Eye, EyeOff, ArrowLeft, UserPlus, Mail } from 'lucide-react';
 import MonkeyAvatar from '../components/MonkeyAvatar';
 import { useAuth } from '../contexts/AuthContext';
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { login, register, error: authError, success: authSuccess, clearError, clearSuccess } = useAuth();
   
-  // Use the loading and error states directly from the AuthContext.
-  // This makes the context the single source of truth.
-  const { 
-    login, 
-    register, 
-    loading, 
-    error: authError, 
-    success: authSuccess, 
-    clearError, 
-    clearSuccess 
-  } = useAuth();
-
-  // Add this to monitor error state changes
-  useEffect(() => {
-    console.log('LoginPage: authError changed to:', authError);
-    if (authError) {
-      console.log('LoginPage: Error is truthy, should display error UI');
-      // Check if error element exists in DOM
-      setTimeout(() => {
-        const errorElement = document.querySelector('.bg-red-50');
-        console.log('Error element in DOM:', errorElement);
-      }, 0);
-    }
-  }, [authError]);
-
-  // Debug: Monitor all auth context values
-  useEffect(() => {
-    console.log('LoginPage: Auth context state:', {
-      loading,
-      authError,
-      authSuccess
-    });
-  }, [loading, authError, authSuccess]);
-  
-  // Determine the active tab from navigation state or default to 'login'.
+  // Set initial tab based on navigation state
   const initialTab = location.state?.activeTab === 'register' ? 'register' : 'login';
   const [activeTab, setActiveTab] = useState<'login' | 'register'>(initialTab);
-  
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+  // Form data
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     name: ''
   });
 
-  // Clear previous success/error messages when the user switches tabs.
-  useEffect(() => {
+  // Clear any existing errors when switching tabs or changing input
+  React.useEffect(() => {
     clearError();
     clearSuccess();
-  }, [activeTab, clearError, clearSuccess]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const { name, value } = e.target;
-  setFormData(prev => ({ ...prev, [name]: value }));
-  
-  // Only clear error if it's related to the field being edited
-  if (authError) {
-    // Clear error only for specific cases
-    if (
-      (name === 'email' && authError.toLowerCase().includes('email')) ||
-      (name === 'password' && authError.toLowerCase().includes('password')) ||
-      (name === 'name' && authError.toLowerCase().includes('name'))
-    ) {
-      clearError();
-    }
-    // Or just remove the clearError entirely to keep errors visible
-    // until the next submission attempt
-  }
-};
+  }, [activeTab, clearError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // The login/register functions in AuthContext will clear the previous error.
-    let success = false;
-    if (activeTab === 'register') {
-      console.log('Calling register function...');
-      success = await register(formData.email, formData.password, formData.name);
-      console.log('Register returned:', success);
-    } else {
-      console.log('Calling login function...');
-      success = await login(formData.email, formData.password);
-      console.log('Login returned:', success);
-    }
+    setLoading(true);
+    clearError();
+    clearSuccess();
 
-    // Check error state immediately after auth attempt
-    console.log('Current authError after submit:', authError);
+    try {
+      let success = false;
+      
+      if (activeTab === 'register') {
+        success = await register(formData.email, formData.password, formData.name);
+      } else {
+        success = await login(formData.email, formData.password);
+      }
 
-    if (success) {
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1500);
+      if (success) {
+        // Small delay to show success message before navigation
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
+      }
+      // Error handling is now done in the auth context
+    } catch (err) {
+      console.error('Form submission error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Add a test button to manually set an error (for debugging)
-  const testError = () => {
-    console.log('Test: Attempting to register with weak password');
-    register('test@example.com', '123', 'Test User');
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Only clear errors after user has typed something substantial
+    if (value.length > 2) {
+      clearError();
+      clearSuccess();
+    }
   };
-  
+
+  const handlePasswordFocus = () => {
+    setIsPasswordFocused(true);
+  };
+
+  const handlePasswordBlur = () => {
+    setIsPasswordFocused(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-      {/* Add debug info at the top */}
-        <div className="mb-4 p-2 bg-gray-800 text-white text-xs rounded">
-          <div>Debug Info:</div>
-          <div>Loading: {String(loading)}</div>
-          <div>Error: {authError || 'null'}</div>
-          <div>Success: {authSuccess || 'null'}</div>
-          <button 
-            onClick={testError}
-            className="mt-2 px-2 py-1 bg-red-600 text-white rounded text-xs"
-          >
-            Test Error (Weak Password)
-          </button>
-        </div>
         {/* Header */}
         <div className="text-center mb-8">
           <MonkeyAvatar
@@ -134,8 +87,8 @@ const LoginPage: React.FC = () => {
             emailValue={formData.email}
             onEmailFocus={() => {}}
             onEmailBlur={() => {}}
-            onPasswordFocus={() => setIsPasswordFocused(true)}
-            onPasswordBlur={() => setIsPasswordFocused(false)}
+            onPasswordFocus={handlePasswordFocus}
+            onPasswordBlur={handlePasswordBlur}
           />
           <h1 className="text-3xl font-bold text-gray-900 mb-2">AgentIQ</h1>
           <p className="text-gray-600">Your collaborative real estate platform</p>
@@ -169,16 +122,16 @@ const LoginPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
           <div className="flex items-center justify-center mb-6">
             {activeTab === 'login' ? (
-              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2" />
+             <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2" />
             ) : (
-              <UserPlus className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2" />
+             <UserPlus className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2" />
             )}
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
               {activeTab === 'login' ? 'Welcome Back' : 'Create Account'}
             </h2>
           </div>
 
-          {/* Success Message Display */}
+          {/* Success Message */}
           {authSuccess && (
             <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
               <div className="flex items-center">
@@ -195,34 +148,27 @@ const LoginPage: React.FC = () => {
             </div>
           )}
 
-          {/* Error Message Display */}
+          {/* Error Message */}
           {authError && (
-          <div 
-            className="mb-6 p-4 bg-red-50 border-2 border-red-300 rounded-lg shadow-sm"
-            style={{ 
-              // Force visibility for debugging
-              display: 'block !important',
-              opacity: '1 !important',
-              visibility: 'visible !important'
-            }}
-          >
-            <div className="flex items-start">
-              <div className="flex-shrink-0">
-                <svg className="h-6 w-6 text-red-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="font-bold text-red-800 text-base">
-                  {activeTab === 'login' ? 'Sign In Failed' : 'Registration Failed'}
-                </p>
-                <p className="mt-2 text-red-700 text-sm leading-relaxed">
-                  {authError}
-                </p>
+            <div className="mb-6 p-4 bg-red-50 border-2 border-red-300 rounded-lg shadow-sm">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <svg className="h-6 w-6 text-red-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="font-bold text-red-800 text-base">
+                    {activeTab === 'login' ? 'Sign In Failed' : 'Registration Failed'}
+                  </p>
+                  <p className="mt-2 text-red-700 text-sm leading-relaxed">{authError}</p>
+                  <p className="mt-3 text-red-600 text-xs">
+                    💡 <strong>Tip:</strong> Check your email and password are correct, or try registering if you don't have an account.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {activeTab === 'register' && (
@@ -271,22 +217,23 @@ const LoginPage: React.FC = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  onFocus={() => setIsPasswordFocused(true)}
-                  onBlur={() => setIsPasswordFocused(false)}
+                  onFocus={handlePasswordFocus}
+                  onBlur={handlePasswordBlur}
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
-                  tabIndex={-1}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    setShowPassword((prev) => !prev);
+                  tabIndex={-1}                             // button itself won’t grab focus
+                  onMouseDown={(e) => {                    // ↓ keep focus on the input
+                    e.preventDefault();                    // stop the blur event
+                    setShowPassword((prev) => !prev);      // toggle
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
+
               </div>
             </div>
 
@@ -305,7 +252,7 @@ const LoginPage: React.FC = () => {
                   <svg className="h-5 w-5 text-white mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Success!
+                  Success! Redirecting...
                 </div>
               ) : (
                 activeTab === 'login' ? 'Sign In' : 'Create Account'
@@ -313,25 +260,40 @@ const LoginPage: React.FC = () => {
             </button>
           </form>
 
-          {/* Toggle between Sign In and Register */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-600 text-sm">
-              {activeTab === 'login' ? "Don't have an account?" : "Already have an account?"}{' '}
-              <button
-                onClick={() => setActiveTab(activeTab === 'login' ? 'register' : 'login')}
-                className="text-blue-600 hover:text-blue-800 font-medium"
-              >
-                {activeTab === 'login' ? 'Register here' : 'Sign in here'}
-              </button>
-            </p>
-          </div>
+          {activeTab === 'login' && (
+            <div className="mt-6 text-center">
+              <p className="text-gray-600 text-sm">
+                Don't have an account?{' '}
+                <button
+                  onClick={() => setActiveTab('register')}
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Register here
+                </button>
+              </p>
+            </div>
+          )}
+
+          {activeTab === 'register' && (
+            <div className="mt-6 text-center">
+              <p className="text-gray-600 text-sm">
+                Already have an account?{' '}
+                <button
+                  onClick={() => setActiveTab('login')}
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Sign in here
+                </button>
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Back to Home */}
         <div className="text-center mt-6">
           <button
             onClick={() => navigate('/')}
-            className="text-gray-600 hover:text-gray-800 font-medium flex items-center justify-center mx-auto"
+            className="text-gray-600 hover:text-gray-800 font-medium flex items-center justify-center"
           >
             <ArrowLeft size={16} className="mr-1" />
             Back to Home

@@ -1,78 +1,24 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
   signOut,
-  updateProfile,
-  type AuthError
+  updateProfile 
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { auth, db } from './config';
 import { updateDashboardStatus } from './firestore';
 
-/**
- * A centralized function to convert Firebase Auth error codes into user-friendly messages.
- * @param {AuthError} error - The error object from Firebase.
- * @returns {{message: string, code: string}} - An object containing the user-friendly message and the original error code.
- */
-const getAuthErrorMessage = (error: AuthError) => {
-  console.error('Firebase Auth Error:', error.code, error.message);
-  let message = 'An unexpected error occurred. Please try again.';
-  switch (error.code) {
-    case 'auth/invalid-email':
-      message = 'Please enter a valid email address.';
-      break;
-    case 'auth/weak-password':
-      message = 'Your password must be at least 6 characters long.';
-      break;
-    case 'auth/email-already-in-use':
-      message = 'An account with this email already exists. Please sign in or use a different email.';
-      break;
-    case 'auth/user-not-found':
-      message = 'No account found with this email address. Please check your email or register.';
-      break;
-    case 'auth/wrong-password':
-    case 'auth/invalid-credential':
-      message = 'Incorrect email or password. Please check your credentials and try again.';
-      break;
-    case 'auth/user-disabled':
-      message = 'This account has been disabled. Please contact support.';
-      break;
-    case 'auth/too-many-requests':
-      message = 'Access to this account has been temporarily disabled due to many failed login attempts. Please try again later.';
-      break;
-    case 'auth/network-request-failed':
-      message = 'Network error. Please check your internet connection and try again.';
-      break;
-    case 'auth/operation-not-allowed':
-      message = 'Email/password accounts are not enabled. Please contact support.';
-      break;
-    case 'auth/missing-password':
-        message = 'Password is required. Please enter your password.';
-        break;
-    case 'auth/missing-email':
-        message = 'Email is required. Please enter your email address.';
-        break;
-    default:
-        // Use Firebase's message for any unhandled errors, or fall back to a generic one.
-        message = error.message || 'An unexpected authentication error occurred.';
-  }
-  console.log('Formatted error message:', message); // ADD THIS
-  return { message, code: error.code };
-};
-
-/**
- * Registers a new agent user.
- * @returns {Promise<{success: boolean, user?: object, error?: string, code?: string}>}
- */
+// Register new agent
 export const registerAgent = async (email, password, name) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-
+    
+    // Update the user's display name
     await updateProfile(user, { displayName: name });
-
-    const userDocRef = doc(db, 'users', user.uid);
-    await setDoc(userDocRef, {
+    
+    // Create user document in Firestore
+    await setDoc(doc(db, 'users', user.uid), {
       uid: user.uid,
       email: email,
       name: name,
@@ -80,26 +26,36 @@ export const registerAgent = async (email, password, name) => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     });
-
+    
     return { success: true, user: { id: user.uid, email, name, role: 'agent' } };
   } catch (error) {
-    const { message, code } = getAuthErrorMessage(error as AuthError);
-    console.log('registerAgent returning error:', { message, code }); // ADD THIS
-    return { success: false, error: message, code: code };
+    console.error('Registration error:', error);
+    
+    // Handle specific Firebase auth errors
+    if (error.code === 'auth/email-already-in-use') {
+      return { success: false, error: 'An account with this email already exists. Please sign in instead.', code: 'auth/email-already-in-use' };
+    } else if (error.code === 'auth/weak-password') {
+      return { success: false, error: 'Password should be at least 6 characters long.', code: 'auth/weak-password' };
+    } else if (error.code === 'auth/invalid-email') {
+      return { success: false, error: 'Please enter a valid email address.', code: 'auth/invalid-email' };
+    } else if (error.code === 'auth/operation-not-allowed') {
+      return { success: false, error: 'Email/password accounts are not enabled. Please contact support.', code: 'auth/operation-not-allowed' };
+    }
+    
+    return { success: false, error: error.message || 'Registration failed. Please try again.', code: error.code };
   }
 };
 
-/**
- * Registers a new client user via an invitation.
- * @returns {Promise<{success: boolean, user?: object, error?: string, code?: string}>}
- */
+// Register new client (through invitation)
 export const registerClient = async (email, password, name, invitationToken) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-
+    
+    // Update the user's display name
     await updateProfile(user, { displayName: name });
-
+    
+    // Create user document in Firestore
     await setDoc(doc(db, 'users', user.uid), {
       uid: user.uid,
       email: email,
@@ -108,78 +64,103 @@ export const registerClient = async (email, password, name, invitationToken) => 
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     });
-
+    
+    // Add client to dashboard members using invitation token
     if (invitationToken) {
       await updateDoc(doc(db, 'dashboards', invitationToken), {
         members: arrayUnion(user.uid),
         updatedAt: new Date().toISOString()
       });
+      
+      // Update dashboard status to active after successful client registration
       await updateDashboardStatus(invitationToken, 'active');
     }
-
+    
     return { success: true, user: { id: user.uid, email, name, role: 'client' } };
   } catch (error) {
-    const { message, code } = getAuthErrorMessage(error as AuthError);
-    return { success: false, error: message, code: code };
+    console.error('Client registration error:', error);
+    
+    // Handle specific Firebase auth errors
+    if (error.code === 'auth/email-already-in-use') {
+      return { success: false, error: 'An account with this email already exists. Please sign in instead.' };
+    } else if (error.code === 'auth/weak-password') {
+      return { success: false, error: 'Password should be at least 6 characters long.' };
+    } else if (error.code === 'auth/invalid-email') {
+      return { success: false, error: 'Please enter a valid email address.' };
+    } else if (error.code === 'auth/operation-not-allowed') {
+      return { success: false, error: 'Email/password accounts are not enabled. Please contact support.' };
+    }
+    
+    return { success: false, error: error.message || 'Registration failed. Please try again.' };
   }
 };
 
-/**
- * Signs in any user (agent or client).
- * @returns {Promise<{success: boolean, user?: object, error?: string, code?: string}>}
- */
+// Unified sign in for all users
 export const signInUser = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-
+    
+    // Get user data from Firestore
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     if (userDoc.exists()) {
       const userData = userDoc.data();
-      return {
-        success: true,
-        user: {
-          id: user.uid,
-          email: user.email,
-          name: userData.name,
+      return { 
+        success: true, 
+        user: { 
+          id: user.uid, 
+          email: user.email, 
+          name: userData.name, 
           role: userData.role,
           firebaseUid: user.uid
-        }
+        } 
       };
     } else {
-      // This case is rare if registration always creates a user doc, but it's good practice to handle it.
-      throw new Error('User data not found in the database. Please contact support.');
+      throw new Error('User account not found. Please contact your administrator.');
     }
   } catch (error) {
-    // If the error is not a standard AuthError, it might be the custom one from the try block.
-    if (error instanceof Error && !(error as AuthError).code) {
-        return { success: false, error: error.message };
+    console.log('Firebase auth error details:', {
+      code: error.code,
+      message: error.message,
+      email: email
+    });
+    
+    if (error.code === 'auth/user-not-found') {
+      return { success: false, error: 'No account found with this email address. Please check your email or register for a new account.' };
+    } else if (error.code === 'auth/wrong-password') {
+      return { success: false, error: 'Incorrect password. Please check your password and try again.' };
+    } else if (error.code === 'auth/invalid-credential') {
+      return { success: false, error: 'Invalid email or password. Please double-check your login credentials.' };
+    } else if (error.code === 'auth/invalid-email') {
+      return { success: false, error: 'Invalid email address format. Please enter a valid email.' };
+    } else if (error.code === 'auth/missing-password') {
+      return { success: false, error: 'Password is required. Please enter your password.' };
+    } else if (error.code === 'auth/missing-email') {
+      return { success: false, error: 'Email is required. Please enter your email address.' };
+    } else if (error.code === 'auth/user-disabled') {
+      return { success: false, error: 'This account has been disabled. Please contact support.' };
+    } else if (error.code === 'auth/too-many-requests') {
+      return { success: false, error: 'Too many failed login attempts. Please wait a few minutes before trying again.' };
+    } else if (error.code === 'auth/network-request-failed') {
+      return { success: false, error: 'Network error. Please check your internet connection and try again.' };
     }
-    const { message, code } = getAuthErrorMessage(error as AuthError);
-    return { success: false, error: message, code: code };
+    
+    return { success: false, error: error.message || 'Login failed due to an unexpected error. Please try again.' };
   }
 };
 
-/**
- * Signs out the current user.
- * @returns {Promise<{success: boolean, error?: string}>}
- */
+// Sign out
 export const signOutUser = async () => {
   try {
     await signOut(auth);
     return { success: true };
   } catch (error) {
-    const { message } = getAuthErrorMessage(error as AuthError);
-    return { success: false, error: message };
+    console.error('Sign out error:', error);
+    return { success: false, error: error.message };
   }
 };
 
-/**
- * Generates an invitation link for clients.
- * @param {string} dashboardId - The ID of the dashboard to join.
- * @param {string} [clientEmail] - Optional email to pre-fill.
- * @returns {string} The full invitation URL.
- */
+// Generate invitation link for clients
 export const generateInvitationLink = (dashboardId, clientEmail) => {
   const baseUrl = window.location.origin;
   const invitationUrl = `${baseUrl}/invite/${dashboardId}${clientEmail ? `?email=${encodeURIComponent(clientEmail)}` : ''}`;
