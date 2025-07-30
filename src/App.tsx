@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import InvitePage from './pages/InvitePage';
+import ContactUsPage from './pages/ContactUsPage';
 import DashboardPage from './pages/DashboardPage';
 import BuyerDashboard from './pages/BuyerDashboard';
 import SellerDashboard from './pages/SellerDashboard';
@@ -24,6 +25,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/contact" element={<ContactUsPage />} />
       <Route path="/login" element={!currentUser ? <LoginPage /> : <Navigate to="/dashboard" replace />} />
       <Route path="/invite/:dashboardId" element={<InvitePage />} />
       
