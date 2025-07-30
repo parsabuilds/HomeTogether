@@ -389,23 +389,23 @@ const DashboardPage = () => {
                             title="Edit Dashboard"
                           >
                             <Edit size={16} />
-                          </button>
+                         <Edit size={14} className="sm:w-4 sm:h-4" />
                           <button
                             onClick={() => handleDeleteDashboard(dashboard.id)}
                             className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete Dashboard"
+                         className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           >
                             <Trash2 size={16} />
-                          </button>
+                         <Trash2 size={14} className="sm:w-4 sm:h-4" />
                         </>
                       )}
                       <button
                         onClick={() => openDashboard(dashboard)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-1"
-                      >
-                        <ExternalLink size={14} />
-                        <span>Open</span>
-                      </button>
+                       className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                     className="bg-blue-600 text-white px-2 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-1"
+                       {copiedId === dashboard.id ? <Check size={14} className="text-green-600 sm:w-4 sm:h-4" /> : <Copy size={14} className="sm:w-4 sm:h-4" />}
+                     <ExternalLink size={12} className="sm:w-3.5 sm:h-3.5" />
+                     <span className="text-xs sm:text-sm">Open</span>
                     </div>
                   </div>
                 </div>
@@ -414,7 +414,7 @@ const DashboardPage = () => {
           )}
         </div>
       </main>
-
+                         className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
       {/* Create Dashboard Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
