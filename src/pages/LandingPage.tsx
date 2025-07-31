@@ -185,7 +185,7 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <div className="flex items-center">
+              <div className="hidden md:flex items-center">
                 <img src="/logo.png" alt="HomeTogether" className="w-14 h-12 object-contain" onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
@@ -202,18 +202,18 @@ const LandingPage = () => {
               <button onClick={() => scrollToSection('features')} className="text-gray-600 hover:text-gray-800 font-medium">Features</button>
               <button onClick={() => scrollToSection('pricing')} className="text-gray-600 hover:text-gray-800 font-medium">Pricing</button>
             </div>
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => navigate('/login', { state: { activeTab: 'login' } })}
-                className="text-gray-600 hover:text-gray-800 font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                Sign In
-              </button>
+            <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-3">
               <button
                 onClick={() => navigate('/login', { state: { activeTab: 'register' } })}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium order-1 md:order-2"
               >
                 Get Started Free
+              </button>
+              <button
+                onClick={() => navigate('/login', { state: { activeTab: 'login' } })}
+                className="text-gray-600 hover:text-gray-800 font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors order-2 md:order-1"
+              >
+                Sign In
               </button>
             </div>
           </div>
