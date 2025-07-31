@@ -277,7 +277,7 @@ const LandingPage = () => {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative">
               {/* Gradient Border Container */}
-              <div className="p-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-2xl shadow-2xl" style={{ zIndex: 50 }}>
+              <div className="p-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-2xl shadow-2xl">
                 <div className="bg-white rounded-xl p-4 shadow-lg">
                   <img 
                     src="/app-screenshot.png" 
@@ -292,7 +292,7 @@ const LandingPage = () => {
               </div>
               
               {/* Floating Badge */}
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2" style={{ zIndex: 51 }}>
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <div className="bg-white px-6 py-2 rounded-full shadow-lg border border-gray-200">
                   <span className="text-sm font-semibold text-gray-800">See HomeTogether in Action</span>
                 </div>
@@ -303,7 +303,7 @@ const LandingPage = () => {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-24 lg:pt-40 bg-white" style={{ position: 'relative', zIndex: 1 }}>
+      <section id="how-it-works" className="py-24 lg:pt-40 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
