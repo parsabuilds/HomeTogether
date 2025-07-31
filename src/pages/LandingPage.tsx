@@ -207,11 +207,11 @@ const LandingPage = () => {
                 onClick={() => navigate('/login', { state: { activeTab: 'login' } })}
                 className="text-gray-600 hover:text-gray-800 font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                Sign In
+                Log In
               </button>
               <button
                 onClick={() => navigate('/login', { state: { activeTab: 'register' } })}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+                className="hidden md:inline-flex bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
               >
                 Get Started Free
               </button>
