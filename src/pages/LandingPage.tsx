@@ -221,7 +221,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pb-32 lg:pb-64">
+      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 lg:pb-20">
           <div className="text-center">
             {/* Badge */}
@@ -271,39 +271,10 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
-
-        {/* App Screenshot - This will now display correctly */}
-        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2 z-10">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative">
-              {/* Gradient Border Container */}
-              <div className="p-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-2xl shadow-2xl">
-                <div className="bg-white rounded-xl p-4 shadow-lg">
-                  <img 
-                    src="/app-screenshot.png" 
-                    alt="HomeTogether Dashboard Screenshot" 
-                    className="w-full h-auto rounded-lg shadow-lg"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://images.pexels.com/photos/7414289/pexels-photo-7414289.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop';
-                    }}
-                  />
-                </div>
-              </div>
-              
-              {/* Floating Badge */}
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <div className="bg-white px-6 py-2 rounded-full shadow-lg border border-gray-200">
-                  <span className="text-sm font-semibold text-gray-800">See HomeTogether in Action</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-24 lg:pt-40 bg-white relative">
+      <section id="how-it-works" className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -334,15 +305,33 @@ const LandingPage = () => {
             })}
           </div>
 
-          {/* Demo CTA */}
-          <div className="text-center mt-16">
-            <button 
-              onClick={() => navigate('/login', { state: { activeTab: 'register' } })}
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-full text-blue-800 text-sm font-medium hover:from-blue-100 hover:to-purple-100 transition-all duration-200 cursor-pointer"
-            >
-              <Zap className="w-4 h-4 mr-2" />
-              Get started in under 2 minutes • No credit card required
-            </button>
+          {/* App Screenshot */}
+          <div className="hidden lg:block text-center mt-16">
+            <div className="max-w-5xl mx-auto">
+              <div className="relative inline-block">
+                {/* Gradient Border Container */}
+                <div className="p-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-2xl shadow-2xl">
+                  <div className="bg-white rounded-xl p-4 shadow-lg">
+                    <img 
+                      src="/app-screenshot.png" 
+                      alt="HomeTogether Dashboard Screenshot" 
+                      className="w-full h-auto rounded-lg shadow-lg"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'https://images.pexels.com/photos/7414289/pexels-photo-7414289.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop';
+                      }}
+                    />
+                  </div>
+                </div>
+                
+                {/* Floating Badge */}
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <div className="bg-white px-6 py-2 rounded-full shadow-lg border border-gray-200">
+                    <span className="text-sm font-semibold text-gray-800">See HomeTogether in Action</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
