@@ -130,7 +130,7 @@ const LandingPage = () => {
     },
     {
       name: "Professional",
-      price: "$19",
+      price: "$9.99",
       period: "per month",
       description: "Everything you need to scale your business",
       features: [
@@ -148,7 +148,7 @@ const LandingPage = () => {
     },
     {
       name: "Brokerage",
-      price: "$199", 
+      price: "$99", 
       period: "per month",
       description: "For teams and brokerages (up to 40 agents)",
       features: [
