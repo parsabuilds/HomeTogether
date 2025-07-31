@@ -221,7 +221,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pb-32 lg:pb-64">
+      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pb-32 lg:pb-64">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 lg:pb-20">
           <div className="text-center">
             {/* Badge */}
@@ -272,7 +272,7 @@ const LandingPage = () => {
           </div>
         </div>
 
-        {/* App Screenshot - Overlapping sections (Desktop Only) */}
+        {/* App Screenshot - This will now display correctly */}
         <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2 z-10">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative">
