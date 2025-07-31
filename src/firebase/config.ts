@@ -20,15 +20,14 @@ const getEnvVar = (key, fallback) => {
 };
 
 // Your web app's Firebase configuration
-// Firebase configuration - these values are safe to expose publicly
-// They are client-side identifiers, not secret keys
+// Production Firebase configuration
 const firebaseConfig = {
-  apiKey: getEnvVar('VITE_FIREBASE_API_KEY', "your-api-key"),
-  authDomain: getEnvVar('VITE_FIREBASE_AUTH_DOMAIN', "your-project.firebaseapp.com"),
-  projectId: getEnvVar('VITE_FIREBASE_PROJECT_ID', "your-project-id"),
-  storageBucket: getEnvVar('VITE_FIREBASE_STORAGE_BUCKET', "your-project.appspot.com"),
-  messagingSenderId: getEnvVar('VITE_FIREBASE_MESSAGING_SENDER_ID', "123456789"),
-  appId: getEnvVar('VITE_FIREBASE_APP_ID', "1:123456789:web:abcdef123456")
+  apiKey: getEnvVar('VITE_FIREBASE_API_KEY', "AIzaSyBDZKsGzGkz4bn1O9fj9O5awfMXzbK0pVA"),
+  authDomain: getEnvVar('VITE_FIREBASE_AUTH_DOMAIN', "agentiqbolt.firebaseapp.com"),
+  projectId: getEnvVar('VITE_FIREBASE_PROJECT_ID', "agentiqbolt"),
+  storageBucket: getEnvVar('VITE_FIREBASE_STORAGE_BUCKET', "agentiqbolt.firebasestorage.app"),
+  messagingSenderId: getEnvVar('VITE_FIREBASE_MESSAGING_SENDER_ID', "896856772756"),
+  appId: getEnvVar('VITE_FIREBASE_APP_ID', "1:896856772756:web:d2ba9f4a5ac829e8486481")
 };
 
 // Initialize Firebase
