@@ -273,6 +273,35 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* App Screenshot Section - Desktop Only */}
+      <section className="hidden lg:block py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative">
+            {/* Gradient Border Container */}
+            <div className="p-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-2xl shadow-2xl">
+              <div className="bg-white rounded-xl p-4 shadow-lg">
+                <img 
+                  src="/app-screenshot.png" 
+                  alt="HomeTogether Dashboard Screenshot" 
+                  className="w-full h-auto rounded-lg shadow-lg"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'https://images.pexels.com/photos/7414289/pexels-photo-7414289.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop';
+                  }}
+                />
+              </div>
+            </div>
+            
+            {/* Floating Badge */}
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <div className="bg-white px-6 py-2 rounded-full shadow-lg border border-gray-200">
+                <span className="text-sm font-semibold text-gray-800">See HomeTogether in Action</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* How It Works Section */}
       <section id="how-it-works" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
