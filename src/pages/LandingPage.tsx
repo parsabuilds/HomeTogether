@@ -193,7 +193,7 @@ const LandingPage = () => {
                 }} />
                 <Home className="w-10 h-10 text-gray-700 hidden" />
               </div>
-              <span className="hidden sm:inline text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 HomeTogether
               </span>
             </div>
@@ -548,7 +548,7 @@ const LandingPage = () => {
                   }} />
                   <Home className="w-10 h-10 text-gray-700 hidden" />
                 </div>
-                <span className="hidden sm:inline text-2xl font-bold">HomeTogether</span>
+                <span className="text-2xl font-bold">HomeTogether</span>
               </div>
               <p className="text-gray-400 mb-6 leading-relaxed">
                 The collaborative real estate platform that helps agents deliver exceptional client experiences 
