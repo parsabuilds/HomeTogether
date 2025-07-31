@@ -185,13 +185,13 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <div className="hidden md:flex items-center">
-                <img src="/logo.png" alt="HomeTogether" className="w-14 h-12 object-contain" onError={(e) => {
+              <div className="flex items-center">
+                <img src="/logo.png" alt="HomeTogether" className="w-8 h-8 md:w-10 md:h-10 object-contain" onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   target.nextElementSibling?.classList.remove('hidden');
                 }} />
-                <Home className="w-10 h-10 text-gray-700 hidden" />
+                <Home className="w-8 h-8 md:w-10 md:h-10 text-gray-700 hidden" />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 HomeTogether
