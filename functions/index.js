@@ -87,18 +87,18 @@ exports.sendContactEmail = functions.https.onRequest(async (req, res) => {
       </div>
       <hr>
       <p style="color: #666; font-size: 12px;">
-        This message was sent via the AgentIQ contact form.
+        This message was sent via the HomeTogether contact form.
       </p>
     `;
 
     // Create email object
     const sendSmtpEmail = new SendSmtpEmail();
     sendSmtpEmail.sender = { 
-      name: 'AgentIQ Contact Form', 
+      name: 'HomeTogether Contact Form', 
       email: 'parsarajabi14@gmail.com' // TODO: Replace with your verified Brevo sender email
     };
     sendSmtpEmail.to = [{ 
-      name: 'AgentIQ Support', 
+      name: 'HomeTogether Support', 
       email: 'parsarajabi7@gmail.com' // TODO: Replace with your personal email
     }];
     sendSmtpEmail.replyTo = { 

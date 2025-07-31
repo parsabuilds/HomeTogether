@@ -128,7 +128,7 @@ const ContactUsPage = () => {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Get in Touch</h2>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Have a question about AgentIQ? Need help getting started? 
+                Have a question about HomeTogether? Need help getting started? 
                 Want to share feedback? We're here to help and would love to hear from you.
               </p>
             </div>

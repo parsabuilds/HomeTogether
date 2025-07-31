@@ -186,10 +186,15 @@ const LandingPage = () => {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                <Home className="w-6 h-6 text-white" />
+                <img src="/logo.png" alt="HomeTogether" className="w-6 h-6 object-contain" onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.nextElementSibling?.classList.remove('hidden');
+                }} />
+                <Home className="w-6 h-6 text-white hidden" />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                AgentIQ
+                HomeTogether
               </span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -235,8 +240,8 @@ const LandingPage = () => {
             
             {/* Subheadline */}
             <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-              The first real estate platform <strong>built by an agent</strong> to solve agent problems. 
-              Collaborate in real-time, track progress together, and close more deals.
+              Have a question about HomeTogether? Need help getting started? 
+              Want to share feedback? We're here to help and would love to hear from you.
             </p>
             
             {/* CTA Buttons */}
@@ -507,16 +512,21 @@ const LandingPage = () => {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                  <Home className="w-6 h-6 text-white" />
+                  <img src="/logo.png" alt="HomeTogether" className="w-6 h-6 object-contain" onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    target.nextElementSibling?.classList.remove('hidden');
+                  }} />
+                  <Home className="w-6 h-6 text-white hidden" />
                 </div>
-                <span className="text-2xl font-bold">AgentIQ</span>
+                <span className="text-2xl font-bold">HomeTogether</span>
               </div>
               <p className="text-gray-400 mb-6 leading-relaxed">
                 The collaborative real estate platform that helps agents deliver exceptional client experiences 
                 and close more deals.
               </p>
               <div className="text-gray-400 text-sm">
-                <p>&copy; 2025 AgentIQ. All rights reserved.</p>
+                <p>&copy; 2025 HomeTogether. All rights reserved.</p>
                 <p className="mt-2">Built for real estate professionals, by real estate professionals.</p>
               </div>
             </div>

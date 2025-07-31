@@ -144,7 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('agentiq_user', JSON.stringify(user));
         localStorage.setItem('agentiq_role', 'agent');
         
-        setSuccess(`Account created successfully! Welcome to AgentIQ, ${user.name}!`);
+        setSuccess(`Account created successfully! Welcome to HomeTogether, ${user.name}!`);
         return true;
       } else {
         // Enhanced error handling with more details

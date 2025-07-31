@@ -125,7 +125,7 @@ const InvitePage = () => {
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Home className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">AgentIQ</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">HomeTogether</h1>
           <p className="text-gray-600">Complete your account setup</p>
         </div>
 

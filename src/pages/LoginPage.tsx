@@ -91,6 +91,7 @@ const LoginPage = () => {
             onPasswordBlur={handlePasswordBlur}
           />
           <h1 className="text-3xl font-bold text-gray-900 mb-2">AgentIQ</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">HomeTogether</h1>
           <p className="text-gray-600">Your collaborative real estate platform</p>
         </div>
 
