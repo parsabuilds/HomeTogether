@@ -355,7 +355,7 @@ const LandingPage = () => {
               Loved by Real Estate Pros
             </h2>
             <p className="text-xl text-gray-600">
-              See what agents and clients are saying about AgentIQ
+              See what agents and clients are saying about HomeTogether
             </p>
           </div>
 
