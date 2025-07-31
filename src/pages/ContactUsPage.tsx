@@ -68,7 +68,7 @@ const ContactUsPage = () => {
 
     try {
       // TODO: Replace with your actual Cloud Function URL after deployment
-      const functionUrl = 'https://sendcontactemail-l7xawwa4va-uc.a.run.app';
+      const functionUrl = 'https://us-central1-agentiqbolt.cloudfunctions.net/sendContactEmail';
       
       const response = await fetch(functionUrl, {
         method: 'POST',
