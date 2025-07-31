@@ -287,15 +287,11 @@ const LandingPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {steps.map((step, index) => {
-              const IconComponent = step.icon;
               return (
                 <div key={step.number} className="relative">
                   <div className="text-center relative z-10">
                     <div className={`w-20 h-20 bg-gradient-to-br ${step.color} rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg`}>
-                      <IconComponent className="w-10 h-10 text-white" />
-                    </div>
-                    <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
-                      {step.number}
+                      <span className="text-3xl font-bold text-white">{step.number}</span>
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
                     <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
