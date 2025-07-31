@@ -221,8 +221,8 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pb-32 lg:pb-64">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 lg:pb-20">
           <div className="text-center">
             {/* Badge */}
             <div className="inline-flex items-center px-4 py-2 bg-blue-100 rounded-full text-blue-800 text-sm font-medium mb-8">
@@ -271,31 +271,31 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
-      </section>
 
-      {/* App Screenshot Section - Desktop Only */}
-      <section className="hidden lg:block py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative">
-            {/* Gradient Border Container */}
-            <div className="p-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-2xl shadow-2xl">
-              <div className="bg-white rounded-xl p-4 shadow-lg">
-                <img 
-                  src="/app-screenshot.png" 
-                  alt="HomeTogether Dashboard Screenshot" 
-                  className="w-full h-auto rounded-lg shadow-lg"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'https://images.pexels.com/photos/7414289/pexels-photo-7414289.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop';
-                  }}
-                />
+        {/* App Screenshot - Overlapping sections (Desktop Only) */}
+        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2 z-10">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative">
+              {/* Gradient Border Container */}
+              <div className="p-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-2xl shadow-2xl">
+                <div className="bg-white rounded-xl p-4 shadow-lg">
+                  <img 
+                    src="/app-screenshot.png" 
+                    alt="HomeTogether Dashboard Screenshot" 
+                    className="w-full h-auto rounded-lg shadow-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://images.pexels.com/photos/7414289/pexels-photo-7414289.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop';
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            
-            {/* Floating Badge */}
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <div className="bg-white px-6 py-2 rounded-full shadow-lg border border-gray-200">
-                <span className="text-sm font-semibold text-gray-800">See HomeTogether in Action</span>
+              
+              {/* Floating Badge */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-white px-6 py-2 rounded-full shadow-lg border border-gray-200">
+                  <span className="text-sm font-semibold text-gray-800">See HomeTogether in Action</span>
+                </div>
               </div>
             </div>
           </div>
@@ -303,7 +303,7 @@ const LandingPage = () => {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-24 bg-white">
+      <section id="how-it-works" className="py-24 lg:pt-40 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
