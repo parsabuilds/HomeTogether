@@ -221,7 +221,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pb-32 lg:pb-64">
+      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pb-32 lg:pb-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 lg:pb-20">
           <div className="text-center">
             {/* Badge */}
@@ -303,7 +303,7 @@ const LandingPage = () => {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-24 lg:pt-40 bg-white relative">
+      <section id="how-it-works" className="py-24 lg:pt-56 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
