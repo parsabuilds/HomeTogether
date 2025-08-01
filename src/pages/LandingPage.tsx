@@ -188,7 +188,7 @@ const LandingPage = () => {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
               <div className="flex items-center">
-                <img src="/logo.png" alt="HomeTogether" className="w-14 h-14 md:w-14 md:h-14 object-contain" onError={(e) => {
+                <img src="/logo.png" alt="HomeTogether" className="w-12 h-12 md:w-14 md:h-14 object-contain" onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   target.nextElementSibling?.classList.remove('hidden');
