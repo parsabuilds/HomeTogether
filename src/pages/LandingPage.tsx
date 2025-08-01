@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { 
   Home, 
   Users, 
@@ -26,6 +27,7 @@ import {
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   const features = [
     {
@@ -513,6 +515,7 @@ const LandingPage = () => {
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
+              onClick={() => setShowVideoModal(true)}
           <p className="text-blue-100 text-sm mt-6">
             No credit card required • Setup in under 2 minutes • 14-day free trial
           </p>
@@ -564,6 +567,50 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
+
+      {/* Video Modal */}
+      {showVideoModal && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowVideoModal(false)}
+        >
+          <div 
+            className="relative w-full max-w-4xl mx-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowVideoModal(false)}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+            >
+              <X size={32} />
+            </button>
+            
+            {/* Video Container */}
+            <div className="bg-black rounded-lg overflow-hidden shadow-2xl">
+              <video
+                src="/demo-video.mp4"
+                controls
+                autoPlay
+                className="w-full aspect-video"
+                onError={(e) => {
+                  console.error('Video failed to load:', e);
+                  alert('Sorry, the demo video could not be loaded. Please try again later.');
+                  setShowVideoModal(false);
+                }}
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            {/* Video Title */}
+            <div className="text-center mt-4">
+              <h3 className="text-white text-xl font-semibold">HomeTogether Demo</h3>
+              <p className="text-gray-300 text-sm mt-1">See how real estate collaboration works</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
