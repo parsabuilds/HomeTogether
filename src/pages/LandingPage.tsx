@@ -518,7 +518,6 @@ const LandingPage = () => {
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
-              onClick={() => setShowVideoModal(true)}
           <p className="text-blue-100 text-sm mt-6">
             No credit card required • Setup in under 2 minutes • 14-day free trial
           </p>
