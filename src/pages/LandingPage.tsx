@@ -265,9 +265,9 @@ const LandingPage = () => {
             </div>
 
             {/* Social Proof */}
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+            <div className="flex flex-wrap justify-center items-center gap-4 opacity-60">
               <div className="text-sm text-gray-500 font-medium">TRUSTED BY AGENTS AT</div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-8">
                 <span className="text-lg font-bold text-gray-400">Keller Williams</span>
                 <span className="text-lg font-bold text-gray-400">RE/MAX</span>
                 <span className="text-lg font-bold text-gray-400">Coldwell Banker</span>
