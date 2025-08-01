@@ -223,8 +223,8 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pb-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 lg:pb-20">
+      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
           <div className="text-center">
             {/* Badge */}
             <div className="inline-flex items-center px-4 py-2 bg-blue-100 rounded-full text-blue-800 text-sm font-medium mb-8">
@@ -265,7 +265,7 @@ const LandingPage = () => {
             </div>
 
             {/* Social Proof */}
-            <div className="flex flex-wrap justify-center items-center gap-4 opacity-60">
+            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
               <div className="text-sm text-gray-500 font-medium">TRUSTED BY AGENTS AT</div>
               <div className="flex items-center space-x-8">
                 <span className="text-lg font-bold text-gray-400">Keller Williams</span>
