@@ -91,7 +91,7 @@ const LandingPage = () => {
       name: "Sarah Mitchell",
       role: "Real Estate Agent",
       company: "Keller Williams",
-      text: "AgentIQ has transformed how I work with clients. The real-time collaboration keeps everyone engaged and informed throughout the entire process.",
+      text: "HomeTogether has transformed how I work with clients. The real-time collaboration keeps everyone engaged and informed throughout the entire process.",
       rating: 5
     },
     {
@@ -104,7 +104,7 @@ const LandingPage = () => {
       name: "Lisa Rodriguez",
       role: "Broker Owner",
       company: "Elite Properties",
-      text: "Our agents love AgentIQ. It's helped them close 20% more deals while spending less time on administrative tasks.",
+      text: "Our agents love HomeTogether. It's helped them close 20% more deals while spending less time on administrative tasks.",
       rating: 5
     }
   ];
@@ -114,7 +114,7 @@ const LandingPage = () => {
       name: "Starter",
       price: "Free",
       period: "forever",
-      description: "Perfect for trying out AgentIQ",
+      description: "Perfect for trying out HomeTogether",
       features: [
         "1 active dashboard",
         "Basic progress tracking",
