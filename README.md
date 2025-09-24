@@ -39,7 +39,7 @@ A comprehensive real estate platform that streamlines the home buying and sellin
 
 ## 🌐 Live Demo
 
-Visit the live application: [https://myhomeflow.netlify.app](https://myhomeflow.netlify.app)
+Visit the live application: [https://HomeTogether.app](https://hometogether.app)
 
 ### Demo Accounts
 
