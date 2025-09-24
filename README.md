@@ -1,4 +1,4 @@
-# AgentIQ - Real Estate Platform
+# HomeTogether - Real Estate Platform
 
 A comprehensive real estate platform that streamlines the home buying and selling process with intelligent tools, real-time collaboration, and guided workflows for agents and clients.
 
@@ -62,8 +62,8 @@ Visit the live application: [https://HomeTogether.app](https://hometogether.app)
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/agentiq.git
-   cd agentiq
+   git clone https://github.com/parsabuilds/HomeTogether.git
+   cd HomeTogether
    ```
 
 2. **Install dependencies**
@@ -331,7 +331,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email support@agentiq.com or create an issue in this repository.
+For support, email support@hometogether.app or create an issue in this repository.
 
 ## 🙏 Acknowledgments
 
