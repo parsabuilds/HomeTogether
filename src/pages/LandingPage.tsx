@@ -327,9 +327,12 @@ const LandingPage = () => {
                 
                 {/* Floating Badge */}
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-white px-6 py-2 rounded-full shadow-lg border border-gray-200">
+                  <button
+                    onClick={() => scrollToSection('pricing')}
+                    className="bg-white px-6 py-2 rounded-full shadow-lg border border-gray-200 hover:bg-gray-50 hover:shadow-xl transition-all duration-200 cursor-pointer"
+                  >
                     <span className="text-sm font-semibold text-gray-800">See HomeTogether in Action</span>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
