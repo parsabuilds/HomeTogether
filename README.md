@@ -45,7 +45,7 @@ Visit the live application: [https://HomeTogether.app](https://hometogether.app)
 
 **Agent Login:**
 - Email: `agent@agentiq.com`
-- Password: `password123`
+- Password: `password12`
 
 **Client Registration:**
 - Clients register via secure invitation links sent by agents
